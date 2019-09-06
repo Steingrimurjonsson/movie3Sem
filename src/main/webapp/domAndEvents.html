@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>DOM Manipulation and Events</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+
+            .div {width: 25px; height: 25px;background-color:yellow; margin:1px;} 
+
+        </style>
+    </head>
+    <body>
+        <div id="divHi" >hi</div> 
+        <div id="divHello" >Hello</div>
+        <br><br><br>
+
+        <div id="outer">
+            <div id="div1" class="div">div1</div> 
+            <div id="div2" class="div">div2</div>
+            <div id="div3" class="div">div3</div> 
+            <div id="div4" class="div">div4</div>
+            <div id="div5" class="div">div5</div> 
+            <div id="div6" class="div">div6</div>
+            <div id="div7" class="div">div7</div> 
+            <div id="div8" class="div">div8</div>
+            <div id="div9" class="div">div9</div> 
+            <div id="div10" class="div">div10</div>
+        </div>
+        <p id="p"></p>
+
+        <script>
+            document.onclick = changeElement1;
+            document.onclick = changeElement2;
+            function changeElement1() {
+                var divo = document.getElementById("divHi");
+                var div1 = document.querySelector('#divHi');
+                console.log("Hi from" + div1);
+            }
+            function changeElement2() {
+                var divt = document.getElementById("divHello");
+                var div2 = document.querySelector('#divHello');
+                // var div2 = String(divt);
+                console.log("Hi from" + div2);
+            }
+            
+          
+            const shell = document.querySelector("#outer");
+            const p = document.querySelector("#p");
+       
+            shell.onclick = function (e) {
+                  p.innerHTML = "The Outer Div ID =" + this.id + " <br> " +
+                          "The Inside Div ID =" + e.target.id;
+            }
+     
+        </script>
+    </body>
+</html>
