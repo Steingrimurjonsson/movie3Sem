@@ -20,11 +20,9 @@ import javax.ws.rs.core.MediaType;
 //Todo Remove or change relevant parts before ACTUAL use
 @Path("movie")
 public class ResourceMovie {
-
-
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
                 "pu",
-                "jdbc:mysql://157.230.18.125/movie",
+                "jdbc:mysql://157.230.18.125:3307/movie",
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.CREATE);
