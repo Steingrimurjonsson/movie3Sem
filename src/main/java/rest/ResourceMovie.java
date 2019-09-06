@@ -22,9 +22,15 @@ import javax.ws.rs.core.MediaType;
 public class ResourceMovie {
 
 
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
-    private static MovieFacade facade = MovieFacade.getMovieFacade(emf);
-    private static Gson gson = new Gson();
+    private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
+                "pu",
+                "jdbc:mysql://157.230.18.125/MOVIE",
+                "dev",
+                "ax2",
+                EMF_Creator.Strategy.CREATE);
+    private static final MovieFacade FACADE =  MovieFacade.getMovieFacade(EMF);
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+            
     
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -35,7 +41,7 @@ public class ResourceMovie {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String populate() {
-        facade.populateMovies();
+        FACADE.populateMovies();
         return "{\"msg\":\"done!\"}";
     }
 
@@ -43,30 +49,30 @@ public class ResourceMovie {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getMovieById(@PathParam ("id") int id) {
-        Movie movie = facade.getMovieByID(id);
-        return gson.toJson(movie);
+        Movie movie = FACADE.getMovieByID(id);
+        return GSON.toJson(movie);
     }
         @Path("count")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getMovieCount() {
-        long count = facade.getMovieCount();
+        long count = FACADE.getMovieCount();
         return "{\"count\":"+count+"}";  //Done manually so no need for a DTO
     }
     @Path("all")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAllMovies() {
-        List<Movie>  movies = facade.getAllMovies();
-        return gson.toJson(movies);
+        List<Movie>  movies = FACADE.getAllMovies();
+        return GSON.toJson(movies);
         
     }
        @Path("actorsIn/{name}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAcotorsByMovieName(@PathParam ("name") String name) {
-        List<Movie>  actors = facade.getAcotorsByMovieName(name);
-        return gson.toJson(actors);
+        List<Movie>  actors = FACADE.getAcotorsByMovieName(name);
+        return GSON.toJson(actors);
         
     }
 
@@ -74,8 +80,8 @@ public class ResourceMovie {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getMovieByName(@PathParam ("name") String name) {
-        List <Movie> movie = facade.getMovieByName(name);
-        return gson.toJson(movie);
+        List <Movie> movie = FACADE.getMovieByName(name);
+        return GSON.toJson(movie);
     }
     
     @POST
