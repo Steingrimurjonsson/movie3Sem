@@ -86,7 +86,7 @@ public class FacadeTest {
 
     @Test
     public void testStudentCount() {
-        assertEquals(4, facade.getStudentCount(), "Expects 3 rows in the database");
+        assertEquals(3, facade.getStudentCount(), "Expects 3 rows in the database");
     }
 
     @Test
