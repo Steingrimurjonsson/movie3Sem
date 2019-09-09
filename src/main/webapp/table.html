@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Start Page</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <div id="table"></div>
+        <form>
+            Price: <input type="text" id="txt">
+            <input type="submit" id="but" value="Price less than"><br>
+            Brand: <input type="text" id="txt2">
+            <input type="submit" id="but2" value="What brand are you looking for"><br>
+            Year: <input type="text" id="txt3">
+            <input type="submit" id="but3" value="Year?">
+        </form>
+        <script>
+
+            var cars = [
+                {id: 1, year: 1997, make: 'Ford', model: 'E350', price: 3000},
+                {id: 2, year: 1999, make: 'Chevy', model: 'Venture', price: 4900},
+                {id: 3, year: 2000, make: 'Chevy', model: 'Venture', price: 5000},
+                {id: 4, year: 1996, make: 'Jeep', model: 'Grand Cherokee', price: 4799},
+                {id: 5, year: 2005, make: 'Volvo', model: 'V70', price: 44799}
+            ];
+
+            const table = document.querySelector("#table");
+            const but = document.querySelector("#but");
+            const but2 = document.querySelector("#but2");
+            const but3 = document.querySelector("#but3");
+            const txt = document.querySelector("#txt");
+            const txt2 = document.querySelector("#txt2");
+            const txt3 = document.querySelector("#txt3");
+
+
+
+            var yearC = function (cars, year) {
+                return cars.filter(x => x.year > year);
+            };
+            var brandC = function (cars, make) {
+                return cars.filter(x => x.make === make);
+            };
+            var priceC = function (cars, price) {
+                return cars.filter(x => x.price < price);
+            };
+
+            function jsToTable(cars) {
+                var string = cars.map(x => "<tr><td>" + x.id + "</td><td>" + x.year + "</td><td>" + x.make + "</td><td>" + x.model + "</td><td>" + x.price + "</td></tr>");
+                string.unshift("<table class=\"table\"><tr><th>id</th><th>Year</th><th>Make</th><th>Model</th><th>Price</th></tr>");
+                string.push("</table>");
+                return string.join('');
+            }
+
+            table.innerHTML = jsToTable(cars);
+
+            but.onclick = function (e) {
+                e.preventDefault();
+                let lowerPrice = priceC(cars, txt.value);
+                table.innerHTML = jsToTable(lowerPrice);
+                txt.value = "";
+            }
+            but2.onclick = function (e) {
+                e.preventDefault();
+                let brand = brandC(cars, txt2.value);
+                table.innerHTML = jsToTable(brand);
+                txt2.value = "";
+            }
+            but3.onclick = function (e) {
+                e.preventDefault();
+                let yearUp = yearC(cars, txt3.value);
+                table.innerHTML = jsToTable(yearUp);
+                txt3.value = "";
+            }
+        </script>
+    </body>
+</html>

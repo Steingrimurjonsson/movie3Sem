@@ -2,9 +2,9 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import entities.Student;
+import entities.Movie;
 import utils.EMF_Creator;
-import facades.StudentFacade;
+import facades.MovieFacade;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -18,80 +18,80 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 //Todo Remove or change relevant parts before ACTUAL use
-@Path("student")
-public class ResourceStudent {
+@Path("movie")
+public class ResourceMovie {
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
                 "pu",
-                "jdbc:mysql://157.230.18.125:3307/student",
+                "jdbc:mysql://157.230.18.125:3307/movie",
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.CREATE);
-    private static final StudentFacade FACADE =  StudentFacade.getStudentFacade(EMF);
+    private static final MovieFacade FACADE =  MovieFacade.getMovieFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
             
     
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String demo() {
-        return "{\"msg\":\"Student\"}";
+        return "{\"msg\":\"MOVIES\"}";
     }
    @Path("populate")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String populate() {
-        FACADE.populateStudent();
+        FACADE.populateMovies();
         return "{\"msg\":\"done!\"}";
     }
 
     @Path("{id}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getStudentById(@PathParam ("id") int id) {
-        Student student = FACADE.getStudentByID(id);
-        return GSON.toJson(student);
+    public String getMovieById(@PathParam ("id") int id) {
+        Movie movie = FACADE.getMovieByID(id);
+        return GSON.toJson(movie);
     }
         @Path("count")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getStudentCount() {
-        long count = FACADE.getStudentCount();
+    public String getMovieCount() {
+        long count = FACADE.getMovieCount();
         return "{\"count\":"+count+"}";  //Done manually so no need for a DTO
     }
     @Path("all")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getAllStudent() {
-        List<Student>  student = FACADE.getAllStudent();
-        return GSON.toJson(student);
+    public String getAllMovies() {
+        List<Movie>  movies = FACADE.getAllMovies();
+        return GSON.toJson(movies);
         
     }
-       @Path("colorOf/{name}")
+       @Path("actorsIn/{name}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getAcotorsByStudentName(@PathParam ("name") String name) {
-        List<Student>  color = FACADE.getColorsByStudentName(name);
-        return GSON.toJson(color);
+    public String getAcotorsByMovieName(@PathParam ("name") String name) {
+        List<Movie>  actors = FACADE.getAcotorsByMovieName(name);
+        return GSON.toJson(actors);
         
     }
 
     @Path("name/{name}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getStudentByName(@PathParam ("name") String name) {
-        List <Student> student = FACADE.getStudentByName(name);
-        return GSON.toJson(student);
+    public String getMovieByName(@PathParam ("name") String name) {
+        List <Movie> movie = FACADE.getMovieByName(name);
+        return GSON.toJson(movie);
     }
     
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public void create(Student entity) {
+    public void create(Movie entity) {
         throw new UnsupportedOperationException();
     }
     
     @PUT
     @Path("/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public void update(Student entity, @PathParam("id") int id) {
+    public void update(Movie entity, @PathParam("id") int id) {
         throw new UnsupportedOperationException();
     }
 }

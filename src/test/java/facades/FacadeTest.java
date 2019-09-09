@@ -1,7 +1,7 @@
 package facades;
 
 import utils.EMF_Creator;
-import entities.Student;
+import entities.Movie;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -27,11 +27,11 @@ import utils.EMF_Creator.Strategy;
 public class FacadeTest {
 
     private static EntityManagerFactory emf;
-    private static StudentFacade facade;
-    private Student student1 = new Student(1, "Stein", "yellow");
-    private Student student2 = new Student(2, "Noell", "green");
-    private Student student3 = new Student(3, "Joachim", "yellow");
-
+    private static MovieFacade facade;
+    private Movie movie1 = new Movie(1932, "Nøddebo præstekjole", new String[]{"Jepser Nielsen", "Henrik Poulsen", "Freddy Fræk"});
+    private Movie movie2 = new Movie(1933, "De døde heste", new String[]{"Ulla Tørnæse", "Pia Køl", "Freddy Fræk"});
+    private Movie movie3 = new Movie(1933, "De bløde heste", new String[]{"Ulla Tørnæse", "Pia Køl", "Freddy Fræk"});
+    private Movie movie4 = new Movie(1934, "De søde heste", new String[]{"Ulla Tørnæse", "Pia Køl", "Freddy Fræk"});
 
     public FacadeTest() {
     }
@@ -40,11 +40,11 @@ public class FacadeTest {
     public static void setUpClass() {
         emf = EMF_Creator.createEntityManagerFactory(
                 "pu",
-                "jdbc:mysql://localhost:3307/student_test",
+                "jdbc:mysql://localhost:3307/movie_test",
                 "dev",
                 "ax2",
                 EMF_Creator.Strategy.CREATE);
-        facade = StudentFacade.getStudentFacade(emf);
+        facade = MovieFacade.getMovieFacade(emf);
     }
   @AfterAll
     public static void tearDownClass() {
@@ -67,11 +67,11 @@ public class FacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Student.deleteAllRows").executeUpdate();
-            em.persist(student1);
-            em.persist(student2);
-            em.persist(student3);
-       
+            em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
+            em.persist(movie1);
+            em.persist(movie2);
+            em.persist(movie3);
+            em.persist(movie4);
 
             em.getTransaction().commit();
         } finally {
@@ -85,14 +85,20 @@ public class FacadeTest {
     }
 
     @Test
-    public void testStudentCount() {
-        assertEquals(3, facade.getStudentCount(), "Expects 3 rows in the database");
+    public void testMovieCount() {
+        assertEquals(4, facade.getMovieCount(), "Expects 4 rows in the database");
     }
 
     @Test
-    public void testGetStudentByID() {
-        Student student = facade.getStudentByID(student1.getId());
-        assertThat(student.getColor(), containsString("yellow"));
+    public void testGetMovieByID() {
+        Movie movie = facade.getMovieByID(movie2.getId());
+        assertThat(movie.getActors()[0], containsString("Tørnæse"));
     }
-
+/*
+    @Test
+    public void testMovieHasActors() {
+        Movie movie = facade.getMovieByID(movie1.getId());
+        assertThat(movie.getActors(), arrayContaining("Jesper Nielsen"));
+    }
+*/
 }

@@ -10,31 +10,31 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQueries({
-@NamedQuery(name = "Student.deleteAllRows", query = "DELETE from Student"),
-@NamedQuery(name = "Student.getAll", query = "SELECT m FROM Student m"),
-@NamedQuery(name = "Student.getByName", query = "SELECT m FROM Student m WHERE m.name LIKE :name")
+@NamedQuery(name = "Movie.deleteAllRows", query = "DELETE from Movie"),
+@NamedQuery(name = "Movie.getAll", query = "SELECT m FROM Movie m"),
+@NamedQuery(name = "Movie.getByName", query = "SELECT m FROM Movie m WHERE m.name LIKE :name")
 })
-public class Student implements Serializable {
+public class Movie implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int sId;
+    private int year;
     private String name;
-    private String color;
+    private String[] actors;
     
-       public Student() {
+       public Movie() {
     }
 
-    public Student(int sId, String name, String color) {
-        this.sId = sId;
+    public Movie(int year, String name, String[] actors) {
+        this.year = year;
         this.name = name;
-        this.color = color;
+        this.actors = actors;
     }
      @Override
     public String toString() {
-        return "Student{" + "id=" + id + ", sId=" + sId + ", name=" + name + ", color=" + color + '}';
+        return "Movie{" + "id=" + id + ", year=" + year + ", name=" + name + ", actors=" + actors + '}';
     }
     public int getId() {
         return id;
@@ -44,12 +44,12 @@ public class Student implements Serializable {
         this.id = id;
     }
 
-    public int getsId() {
-        return sId;
+    public int getYear() {
+        return year;
     }
 
-    public void setsId(int sId) {
-        this.sId = sId;
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public String getName() {
@@ -60,15 +60,13 @@ public class Student implements Serializable {
         this.name = name;
     }
 
-    public String getColor() {
-        return color;
+    public String[] getActors() {
+        return actors;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setActors(String[] actors) {
+        this.actors = actors;
     }
-
-
   
 }
 

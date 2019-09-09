@@ -1,6 +1,6 @@
 package facades;
 
-import entities.Student;
+import entities.Movie;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,19 +11,19 @@ import javax.persistence.TypedQuery;
  *
  * Rename Class to a relevant name Add add relevant facade methods
  */
-public class StudentFacade {
+public class MovieFacade {
 
-    private static StudentFacade instance;
+    private static MovieFacade instance;
     private static EntityManagerFactory emf;
     
-    private StudentFacade() {}
+    private MovieFacade() {}
     
     
  
-    public static StudentFacade getStudentFacade(EntityManagerFactory _emf) {
+    public static MovieFacade getMovieFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
-            instance = new StudentFacade();
+            instance = new MovieFacade();
         }
         return instance;
     }
@@ -33,82 +33,82 @@ public class StudentFacade {
     }
     
  
-    public long getStudentCount(){
+    public long getMovieCount(){
         EntityManager em = emf.createEntityManager();
         try{
-            long studentCount = (long)em.createQuery("SELECT COUNT(m) FROM Student m").getSingleResult();
-            return studentCount;
+            long movieCount = (long)em.createQuery("SELECT COUNT(m) FROM Movie m").getSingleResult();
+            return movieCount;
         }finally{  
             em.close();
         }
         
     }
     
-    public Student getStudentByID(int id) {
+    public Movie getMovieByID(int id) {
         EntityManager em = emf.createEntityManager();
         try{
-            Student student = em.find(Student.class, id);
-            return student;
+            Movie movie = em.find(Movie.class, id);
+            return movie;
         }finally{
             em.close();
         }
     }
 
-    public List<Student> getStudentByName(String name) {
+    public List<Movie> getMovieByName(String name) {
         EntityManager em = emf.createEntityManager();
         try{
-            TypedQuery <Student> query =
-                    em.createQuery("Select m from Student m where m.name =:name", Student.class);
+            TypedQuery <Movie> query =
+                    em.createQuery("Select m from Movie m where m.name =:name", Movie.class);
             return query.setParameter("name", name).getResultList();
         } finally{
             em.close();
         }
     }
 
-    public Student addStudent(int sId, String name, String color) {
-        Student student = new Student();
-        student = new Student(sId, name, color);
+    public Movie addMovie(int year, String name, String[] actors) {
+        Movie movie = new Movie();
+        movie = new Movie(year, name, actors);
         EntityManager em = emf.createEntityManager();
         try{
             em.getTransaction().begin();
-            em.persist(student);
+            em.persist(movie);
             em.getTransaction().commit();
-            return student;
+            return movie;
         } finally {
             em.close();
         }
     }
 
-    public List<Student> getAllStudent() {
+    public List<Movie> getAllMovies() {
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery query
-                    = em.createQuery("Select m from Student m", Student.class);
+                    = em.createQuery("Select m from Movie m", Movie.class);
             return query.getResultList();
         } finally {
             em.close();
         }
     }
     
-    public List<Student> getColorsByStudentName(String name) {
+    public List<Movie> getAcotorsByMovieName(String name) {
         EntityManager em = emf.createEntityManager();
         try{
-            TypedQuery <Student> query =
-                    em.createQuery("Select color from Student m where m.name =:name", Student.class);
+            TypedQuery <Movie> query =
+                    em.createQuery("Select actors from Movie m where m.name =:name", Movie.class);
             return query.setParameter("name", name).getResultList();
         } finally{
             em.close();
         }
     }
-    public void populateStudent() {
+    public void populateMovies() {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Student.deleteAllRows").executeUpdate();
-            em.persist(new Student(1, "Stein", "yellow"));
-            em.persist(new Student(2, "Noell", "green"));
-            em.persist(new Student(3, "Joachim", "yellow"));
-           
+            em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
+            em.persist(new Movie(1932, "Nøddebo præstekjole", new String[]{"Jepser Nielsen", "Henrik Poulsen", "Freddy Fræk"}));
+            em.persist(new Movie(1933, "De døde heste", new String[]{"Ulla Tørnæse", "Pia Køl", "Freddy Fræk"}));
+            em.persist(new Movie(1933, "De bløde heste", new String[]{"Ulla Tørnæse", "Pia Køl", "Freddy Fræk"}));
+            em.persist(new Movie(1934, "De søde heste", new String[]{"Ulla Tørnæse", "Pia Køl", "Freddy Fræk"}));
             em.getTransaction().commit();
         } finally {
             em.close();
