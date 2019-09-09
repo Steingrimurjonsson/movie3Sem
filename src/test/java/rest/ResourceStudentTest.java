@@ -1,6 +1,6 @@
 package rest;
 
-import entities.Movie;
+import entities.Student;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -24,20 +24,19 @@ import utils.EMF_Creator.Strategy;
 
 //Uncomment the line below, to temporarily disable this test
 @Disabled
-public class ResourceMovieTest {
+public class ResourceStudentTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
     //Read this line from a settings-file  since used several places
-    private static final String TEST_DB = "jdbc:mysql://localhost:3307/movie_test";
+    private static final String TEST_DB = "jdbc:mysql://localhost:3307/student_test";
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
-    private Movie movie1;
-    private Movie movie2;
-    private Movie movie3;
-    private Movie movie4;
+    private Student student1;
+    private Student student2;
+    private Student student3;
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -71,17 +70,17 @@ public class ResourceMovieTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        movie1 = new Movie(1932, "Nøddebo præstekjole", new String[]{"Jepser Nielsen", "Henrik Poulsen", "Freddy Fræk"});
-        movie2 = new Movie(1933, "De døde heste", new String[]{"Ulla Tørnæse", "Pia Køl", "Freddy Fræk"});
-        movie3 = new Movie(1933, "De bløde heste", new String[]{"Ulla Tørnæse", "Pia Køl", "Freddy Fræk"});
-        movie4 = new Movie(1934, "De søde heste", new String[]{"Ulla Tørnæse", "Pia Køl", "Freddy Fræk"});
+ 
+        student1 = new Student(1, "Stein", "yellow");
+        student2 = new Student(2, "Noell", "green");
+        student3 = new Student(3, "Joachim", "yellow");
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Movie.deleteAllRows").executeUpdate();
-            em.persist(movie1);
-            em.persist(movie2);
-            em.persist(movie3);
-            em.persist(movie4);
+            em.createNamedQuery("Student.deleteAllRows").executeUpdate();
+            em.persist(student1);
+            em.persist(student2);
+            em.persist(student3);
+        
 
             em.getTransaction().commit();
         } finally {
@@ -92,7 +91,7 @@ public class ResourceMovieTest {
     @Test
     public void testServerIsUp() {
         System.out.println("Testing is server UP");
-        given().when().get("/movie").then().statusCode(200);
+        given().when().get("/student").then().statusCode(200);
     }
 
     //This test assumes the database contains two rows
@@ -100,19 +99,19 @@ public class ResourceMovieTest {
     public void testDummyMsg() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/movie/").then()
+                .get("/student/").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("msg", equalTo("MOVIES"));
+                .body("msg", equalTo("Student"));
     }
 
     @Test
     public void testCount() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/movie/count").then()
+                .get("/student/count").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("count", equalTo(4));
+                .body("count", equalTo(3));
     }
 }
